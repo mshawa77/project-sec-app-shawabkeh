@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Secure Application</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 0;
+        }
+        .card {
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
+        .encrypted-display {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            word-break: break-all;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .decrypted-display {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 100px;
+        }
+        .security-badge {
+            background: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+        }
+        .encryption-demo {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .btn-encrypt {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+        }
+        .btn-encrypt:hover {
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+            transform: translateY(-1px);
+        }
+        .user-info-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .feature-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .stats-card {
+            text-align: center;
+            padding: 20px;
+        }
+        .stats-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shield-alt me-2"></i>SecureApp
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/dashboard">
+                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    {% if user.role == "admin" %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin">
+                                <i class="fas fa-user-shield me-1"></i>Admin Panel
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">
+                            <i class="fas fa-sign-out-alt me-1"></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <div class="container text-center">
+            <h1 class="display-5 mb-3">
+                <i class="fas fa-tachometer-alt me-3"></i>User Dashboard
+            </h1>
+            <p class="lead">Welcome back, {{ user.username }}! Manage your encrypted secret notes.</p>
+            <div class="mt-3">
+                <span class="security-badge me-2">
+                    <i class="fas fa-user me-1"></i>{{ user.username }}
+                </span>
+                <span class="security-badge">
+                    <i class="fas fa-shield-alt me-1"></i>{{ user.role.title() }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container py-5">
+        <div class="row">
+            <!-- User Info Card -->
+            <div class="col-lg-4 mb-4">
+                <div class="card user-info-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-user-circle fa-4x mb-3"></i>
+                        <h5 class="card-title">{{ user.username }}</h5>
+                        <p class="card-text">{{ user.email }}</p>
+                        <div class="mb-3">
+                            <span class="badge bg-light text-dark">{{ user.role.title() }}</span>
+                        </div>
+                        <small class="text-light">
+                            <i class="fas fa-clock me-1"></i>
+                            Account created: {{ user.created_at[:10] }}
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Security Stats -->
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <i class="fas fa-chart-line me-2"></i>Security Stats
+                        </h6>
+                        <div class="stats-card">
+                            <div class="stats-number">256-bit</div>
+                            <div class="text-muted">AES Encryption</div>
+                        </div>
+                        <hr>
+                        <div class="stats-card">
+                            <div class="stats-number">bcrypt</div>
+                            <div class="text-muted">Password Hashing</div>
+                        </div>
+                        <hr>
+                        <div class="stats-card">
+                            <div class="stats-number">Secure</div>
+                            <div class="text-muted">Session Management</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Secret Note Section -->
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-lock me-2"></i>Encrypted Secret Note
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Update Form -->
+                        <form method="post" action="/dashboard/update-note" class="mb-4">
+                            <div class="mb-3">
+                                <label for="secret_note" class="form-label">
+                                    <i class="fas fa-edit me-1"></i>Update Your Secret Note
+                                </label>
+                                <textarea class="form-control" id="secret_note" name="secret_note" 
+                                          rows="4" placeholder="Enter your secret message...">{{ decrypted_note }}</textarea>
+                                <div class="form-text">
+                                    Your note will be encrypted using AES-256 before storage.
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-encrypt btn-primary">
+                                <i class="fas fa-save me-2"></i>Encrypt & Save Note
+                            </button>
+                        </form>
+
+                        <!-- Encryption Demo -->
+                        <div class="encryption-demo">
+                            <h6 class="mb-3">
+                                <i class="fas fa-eye me-2"></i>Encryption Demonstration
+                            </h6>
+                            
+                            <!-- Encrypted Data -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-lock text-danger me-1"></i>Encrypted (Stored in Database)
+                                </label>
+                                <div class="encrypted-display">
+                                    {% if encrypted_note %}
+                                        {{ encrypted_note }}
+                                    {% else %}
+                                        <em class="text-muted">No encrypted data yet. Create a secret note above!</em>
+                                    {% endif %}
+                                </div>
+                                <small class="text-muted">
+                                    This is how your data appears in the database - completely unreadable without the decryption key.
+                                </small>
+                            </div>
+
+                            <!-- Decrypted Data -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-unlock text-success me-1"></i>Decrypted (What You See)
+                                </label>
+                                <div class="decrypted-display">
+                                    {% if decrypted_note %}
+                                        {{ decrypted_note }}
+                                    {% else %}
+                                        <em class="text-muted">No data to display yet.</em>
+                                    {% endif %}
+                                </div>
+                                <small class="text-muted">
+                                    This is your original message, securely decrypted for display only.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Features Card -->
+                <div class="card mt-4">
+                    <div class="card-header bg-success text-white">
+                        <h6 class="mb-0">
+                            <i class="fas fa-shield-alt me-2"></i>Your Security Features
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="text-center">
+                                    <i class="fas fa-lock feature-icon text-primary"></i>
+                                    <h6>AES-256 Encryption</h6>
+                                    <p class="small text-muted">Military-grade encryption protects your data</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="text-center">
+                                    <i class="fas fa-user-shield feature-icon text-success"></i>
+                                    <h6>Secure Authentication</h6>
+                                    <p class="small text-muted">bcrypt hashing with secure sessions</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="text-center">
+                                    <i class="fas fa-gavel feature-icon text-warning"></i>
+                                    <h6>XSS Protection</h6>
+                                    <p class="small text-muted">Input validation and sanitization</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="text-center">
+                                    <i class="fas fa-history feature-icon text-info"></i>
+                                    <h6>Audit Trail</h6>
+                                    <p class="small text-muted">Complete activity logging</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <i class="fas fa-bolt me-2"></i>Quick Actions
+                        </h6>
+                        <div class="d-flex gap-2 flex-wrap">
+                            {% if user.role == "admin" %}
+                                <a href="/admin" class="btn btn-outline-primary">
+                                    <i class="fas fa-user-shield me-1"></i>Admin Panel
+                                </a>
+                            {% endif %}
+                            <a href="/security-info" class="btn btn-outline-info">
+                                <i class="fas fa-info-circle me-1"></i>Security Info
+                            </a>
+                            <a href="/health" class="btn btn-outline-success">
+                                <i class="fas fa-heartbeat me-1"></i>System Health
+                            </a>
+                            <button type="button" class="btn btn-outline-warning" onclick="showEncryptionInfo()">
+                                <i class="fas fa-key me-1"></i>Learn About Encryption
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Encryption Info Modal -->
+    <div class="modal fade" id="encryptionModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-key me-2"></i>About AES-256 Encryption
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Your data is protected with military-grade encryption!</strong>
+                    </div>
+                    
+                    <h6>What is AES-256?</h6>
+                    <p>AES (Advanced Encryption Standard) with 256-bit keys is the gold standard for data encryption. It's used by governments, banks, and security professionals worldwide.</p>
+                    
+                    <h6>How it works in this application:</h6>
+                    <ol>
+                        <li><strong>Key Generation:</strong> A unique 256-bit encryption key is generated when the application starts</li>
+                        <li><strong>Encryption:</strong> Your secret note is encrypted before being stored in the database</li>
+                        <li><strong>Storage:</strong> Only the encrypted data (unreadable gibberish) is stored</li>
+                        <li><strong>Decryption:</strong> When you view your note, it's securely decrypted for display only</li>
+                    </ol>
+                    
+                    <h6>Security Benefits:</h6>
+                    <ul>
+                        <li>✅ Database compromise won't reveal your data</li>
+                        <li>✅ Even with physical access, data remains protected</li>
+                        <li>✅ Complies with data protection regulations</li>
+                        <li>✅ Zero-knowledge architecture</li>
+                    </ul>
+                    
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Important:</strong> The encryption key is stored locally on the server. In production, consider using a dedicated key management service.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">
+                <i class="fas fa-shield-alt me-2"></i>
+                Secure Application - Your data is protected with AES-256 encryption
+            </p>
+            <small class="text-muted">
+                Built with FastAPI, SQLite, and Bootstrap | Security Project Demo
+            </small>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        function showEncryptionInfo() {
+            const modal = new bootstrap.Modal(document.getElementById('encryptionModal'));
+            modal.show();
+        }
+
+        // Auto-save functionality (optional enhancement)
+        let autoSaveTimer;
+        const secretNoteTextarea = document.getElementById('secret_note');
+        
+        if (secretNoteTextarea) {
+            secretNoteTextarea.addEventListener('input', function() {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(function() {
+                    // Show auto-save indicator
+                    const indicator = document.createElement('div');
+                    indicator.className = 'alert alert-info alert-dismissible fade show position-fixed';
+                    indicator.style.cssText = 'top: 20px; right: 20px; z-index: 1050; min-width: 250px;';
+                    indicator.innerHTML = `
+                        <i class="fas fa-save me-2"></i>Auto-save available
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    `;
+                    document.body.appendChild(indicator);
+                    
+                    // Remove after 3 seconds
+                    setTimeout(() => {
+                        if (indicator.parentNode) {
+                            indicator.remove();
+                        }
+                    }, 3000);
+                }, 5000);
+            });
+        }
+
+        // Character counter for the textarea
+        if (secretNoteTextarea) {
+            const maxLength = 1000;
+            
+            // Create character counter
+            const counter = document.createElement('div');
+            counter.className = 'form-text text-end';
+            counter.style.cssText = 'margin-top: -10px;';
+            secretNoteTextarea.parentNode.appendChild(counter);
+            
+            function updateCounter() {
+                const length = secretNoteTextarea.value.length;
+                counter.textContent = `${length}/${maxLength} characters`;
+                
+                if (length > maxLength * 0.9) {
+                    counter.className = 'form-text text-end text-warning';
+                } else if (length > maxLength) {
+                    counter.className = 'form-text text-end text-danger';
+                    secretNoteTextarea.value = secretNoteTextarea.value.substring(0, maxLength);
+                } else {
+                    counter.className = 'form-text text-end';
+                }
+            }
+            
+            secretNoteTextarea.addEventListener('input', updateCounter);
+            updateCounter(); // Initialize counter
+        }
+    </script>
+</body>
+</html>

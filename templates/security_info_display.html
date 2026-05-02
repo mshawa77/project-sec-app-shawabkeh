@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Features - Secure Application</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .security-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 0;
+        }
+        .feature-card {
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+            border-left: 4px solid transparent;
+        }
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border-left-color: #667eea;
+        }
+        .feature-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .security-badge {
+            background: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+        }
+        .comparison-table {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        .check-icon {
+            color: #28a745;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shield-alt me-2"></i>SecureApp
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/security-info">
+                            <i class="fas fa-info-circle me-1"></i>Security Info
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/security-dashboard">
+                            <i class="fas fa-chart-line me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="security-header">
+        <div class="container text-center">
+            <h1 class="display-5 mb-3">
+                <i class="fas fa-shield-alt me-3"></i>Security Features
+            </h1>
+            <p class="lead">Comprehensive security measures protecting your application</p>
+            <div class="mt-3">
+                <span class="security-badge me-2">
+                    <i class="fas fa-lock me-1"></i>Enterprise Grade
+                </span>
+                <span class="security-badge">
+                    <i class="fas fa-check-circle me-1"></i>All Features Active
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container py-5">
+        <!-- Security Features Grid -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <h3 class="mb-4 text-center">
+                    <i class="fas fa-shield-alt me-2"></i>Implemented Security Features
+                </h3>
+            </div>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card feature-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-cookie-bite feature-icon"></i>
+                        <h5 class="card-title">Secure Authentication</h5>
+                        <p class="card-text">HTTP-only cookies with secure session management</p>
+                        <div class="mt-3">
+                            <i class="fas fa-check-circle check-icon"></i>
+                            <span class="ms-2">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card feature-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-user-shield feature-icon"></i>
+                        <h5 class="card-title">Role-Based Access Control</h5>
+                        <p class="card-text">Admin and user role separation with proper authorization</p>
+                        <div class="mt-3">
+                            <i class="fas fa-check-circle check-icon"></i>
+                            <span class="ms-2">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card feature-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-lock feature-icon"></i>
+                        <h5 class="card-title">AES-256 Encryption</h5>
+                        <p class="card-text">Military-grade encryption for sensitive data protection</p>
+                        <div class="mt-3">
+                            <i class="fas fa-check-circle check-icon"></i>
+                            <span class="ms-2">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card feature-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-key feature-icon"></i>
+                        <h5 class="card-title">Password Security</h5>
+                        <p class="card-text">bcrypt hashing with salt for secure password storage</p>
+                        <div class="mt-3">
+                            <i class="fas fa-check-circle check-icon"></i>
+                            <span class="ms-2">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card feature-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-shield-virus feature-icon"></i>
+                        <h5 class="card-title">Input Validation</h5>
+                        <p class="card-text">Pydantic models and XSS protection for all inputs</p>
+                        <div class="mt-3">
+                            <i class="fas fa-check-circle check-icon"></i>
+                            <span class="ms-2">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card feature-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-gavel feature-icon"></i>
+                        <h5 class="card-title">Security Headers</h5>
+                        <p class="card-text">CSP, X-Frame-Options, HSTS for enhanced protection</p>
+                        <div class="mt-3">
+                            <i class="fas fa-check-circle check-icon"></i>
+                            <span class="ms-2">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card feature-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-clock feature-icon"></i>
+                        <h5 class="card-title">Session Management</h5>
+                        <p class="card-text">Secure tokens with automatic expiration</p>
+                        <div class="mt-3">
+                            <i class="fas fa-check-circle check-icon"></i>
+                            <span class="ms-2">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card feature-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-ban feature-icon"></i>
+                        <h5 class="card-title">Rate Limiting</h5>
+                        <p class="card-text">Account lockout after failed login attempts</p>
+                        <div class="mt-3">
+                            <i class="fas fa-check-circle check-icon"></i>
+                            <span class="ms-2">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Comparison -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="card comparison-table">
+                    <div class="card-body">
+                        <h4 class="card-title text-center mb-4">
+                            <i class="fas fa-balance-scale me-2"></i>Security Comparison
+                        </h4>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Security Feature</th>
+                                        <th>Implementation</th>
+                                        <th>Protection Level</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><i class="fas fa-cookie-bite me-2"></i>Authentication</td>
+                                        <td>HTTP-only secure cookies</td>
+                                        <td><span class="badge bg-success">High</span></td>
+                                        <td><i class="fas fa-check-circle text-success"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fas fa-user-shield me-2"></i>Authorization</td>
+                                        <td>Role-Based Access Control</td>
+                                        <td><span class="badge bg-success">High</span></td>
+                                        <td><i class="fas fa-check-circle text-success"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fas fa-lock me-2"></i>Encryption</td>
+                                        <td>AES-256 for sensitive data</td>
+                                        <td><span class="badge bg-success">Military</span></td>
+                                        <td><i class="fas fa-check-circle text-success"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fas fa-key me-2"></i>Password Security</td>
+                                        <td>bcrypt with salt</td>
+                                        <td><span class="badge bg-success">High</span></td>
+                                        <td><i class="fas fa-check-circle text-success"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fas fa-shield-virus me-2"></i>Input Protection</td>
+                                        <td>Pydantic + XSS protection</td>
+                                        <td><span class="badge bg-success">Comprehensive</span></td>
+                                        <td><i class="fas fa-check-circle text-success"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fas fa-gavel me-2"></i>Security Headers</td>
+                                        <td>CSP, X-Frame-Options, HSTS</td>
+                                        <td><span class="badge bg-success">Standard</span></td>
+                                        <td><i class="fas fa-check-circle text-success"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fas fa-clock me-2"></i>Session Security</td>
+                                        <td>Secure tokens + expiration</td>
+                                        <td><span class="badge bg-success">Robust</span></td>
+                                        <td><i class="fas fa-check-circle text-success"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fas fa-ban me-2"></i>Rate Limiting</td>
+                                        <td>Account lockout protection</td>
+                                        <td><span class="badge bg-success">Effective</span></td>
+                                        <td><i class="fas fa-check-circle text-success"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-bolt me-2"></i>Quick Actions
+                        </h5>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <a href="/security-dashboard" class="btn btn-primary">
+                                <i class="fas fa-chart-line me-1"></i>Security Dashboard
+                            </a>
+                            <a href="/register" class="btn btn-success">
+                                <i class="fas fa-user-plus me-1"></i>Test Registration
+                            </a>
+                            <a href="/login" class="btn btn-info">
+                                <i class="fas fa-sign-in-alt me-1"></i>Test Login
+                            </a>
+                            <a href="/health" class="btn btn-outline-primary">
+                                <i class="fas fa-heartbeat me-1"></i>System Health
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container text-center">
+            <p class="mb-0">
+                <i class="fas fa-shield-alt me-2"></i>
+                Security Features - Enterprise Protection
+            </p>
+            <small class="text-muted">
+                All security measures implemented and active
+            </small>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

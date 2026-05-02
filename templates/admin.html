@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Secure Application</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .admin-header {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            padding: 40px 0;
+        }
+        .card {
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
+        .admin-badge {
+            background: #dc3545;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+        }
+        .user-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        .user-card:hover {
+            border-left-color: #667eea;
+            background-color: #f8f9fa;
+        }
+        .role-badge {
+            font-size: 0.8em;
+            padding: 4px 8px;
+            border-radius: 12px;
+        }
+        .role-admin {
+            background: #dc3545;
+            color: white;
+        }
+        .role-user {
+            background: #28a745;
+            color: white;
+        }
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+        .status-active {
+            background: #28a745;
+        }
+        .status-locked {
+            background: #dc3545;
+        }
+        .stats-card {
+            text-align: center;
+            padding: 20px;
+        }
+        .stats-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .action-buttons {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .user-card:hover .action-buttons {
+            opacity: 1;
+        }
+        .btn-danger-sm {
+            padding: 4px 8px;
+            font-size: 0.8em;
+        }
+        .search-box {
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .admin-welcome {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 25px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shield-alt me-2"></i>SecureApp
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">
+                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/admin">
+                            <i class="fas fa-user-shield me-1"></i>Admin Panel
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">
+                            <i class="fas fa-sign-out-alt me-1"></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Admin Header -->
+    <div class="admin-header">
+        <div class="container text-center">
+            <h1 class="display-5 mb-3">
+                <i class="fas fa-user-shield me-3"></i>Admin Panel
+            </h1>
+            <p class="lead">System Administration and User Management</p>
+            <div class="mt-3">
+                <span class="admin-badge me-2">
+                    <i class="fas fa-user me-1"></i>{{ user.username }}
+                </span>
+                <span class="admin-badge">
+                    <i class="fas fa-crown me-1"></i>Administrator
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container py-5">
+        <!-- Admin Welcome -->
+        <div class="admin-welcome mb-4">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h4>
+                        <i class="fas fa-crown text-warning me-2"></i>Welcome, Administrator
+                    </h4>
+                    <p class="mb-0">
+                        You have full administrative privileges. Monitor system health, manage users, and oversee security operations.
+                    </p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="alert alert-warning mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Admin Access Only</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="card">
+                    <div class="card-body stats-card">
+                        <div class="stats-number">{{ users|length }}</div>
+                        <div class="text-muted">Total Users</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card">
+                    <div class="card-body stats-card">
+                        <div class="stats-number">{{ users|selectattr('role', 'equalto', 'admin')|list|length }}</div>
+                        <div class="text-muted">Admin Users</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card">
+                    <div class="card-body stats-card">
+                        <div class="stats-number">{{ users|selectattr('role', 'equalto', 'user')|list|length }}</div>
+                        <div class="text-muted">Regular Users</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card">
+                    <div class="card-body stats-card">
+                        <div class="stats-number">{{ users|selectattr('is_locked')|list|length }}</div>
+                        <div class="text-muted">Locked Accounts</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Management -->
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h5 class="mb-0">
+                            <i class="fas fa-users me-2"></i>User Management
+                        </h5>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="search-box">
+                            <div class="input-group">
+                                <span class="input-group-text bg-transparent border-0">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                                <input type="text" class="form-control border-0" id="userSearch" 
+                                       placeholder="Search users...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Users List -->
+                <div class="row" id="usersList">
+                    {% for user_info in users %}
+                    <div class="col-md-6 col-lg-4 mb-3 user-item" 
+                         data-username="{{ user_info.username.lower() }}" 
+                         data-email="{{ user_info.email.lower() }}"
+                         data-role="{{ user_info.role }}">
+                        <div class="card user-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <h6 class="card-title mb-1">
+                                            <i class="fas fa-user-circle me-2"></i>{{ user_info.username }}
+                                        </h6>
+                                        <small class="text-muted">{{ user_info.email }}</small>
+                                    </div>
+                                    <div>
+                                        {% if user_info.is_locked() %}
+                                            <span class="status-indicator status-locked" 
+                                                  title="Account Locked"></span>
+                                        {% else %}
+                                            <span class="status-indicator status-active" 
+                                                  title="Account Active"></span>
+                                        {% endif %}
+                                        <span class="role-badge {% if user_info.role == 'admin' %}role-admin{% else %}role-user{% endif %}">
+                                            {{ user_info.role.title() }}
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-2">
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar me-1"></i>
+                                        Joined: {{ user_info.created_at[:10] }}
+                                    </small>
+                                </div>
+                                
+                                {% if user_info.is_locked() %}
+                                    <div class="alert alert-danger py-2 mb-2">
+                                        <small>
+                                            <i class="fas fa-lock me-1"></i>
+                                            Locked until {{ user_info.lockout_until[:16] if user_info.lockout_until else 'Unknown' }}
+                                        </small>
+                                    </div>
+                                {% endif %}
+                                
+                                <div class="mb-2">
+                                    <small class="text-muted">
+                                        Failed attempts: {{ user_info.failed_login_attempts }}
+                                    </small>
+                                </div>
+                                
+                                <!-- Action Buttons -->
+                                <div class="action-buttons">
+                                    {% if user_info.id != user.id %}
+                                        <form method="post" action="/admin/delete-user/{{ user_info.id }}" 
+                                              class="d-inline" 
+                                              onsubmit="return confirm('Are you sure you want to delete user {{ user_info.username }}? This action cannot be undone.')">
+                                            <button type="submit" class="btn btn-danger btn-sm btn-danger-sm">
+                                                <i class="fas fa-trash me-1"></i>Delete
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Your Account</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                {% if users|length == 0 %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No Users Found</h5>
+                        <p class="text-muted">There are no users in the system yet.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- System Information -->
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h6 class="mb-0">
+                            <i class="fas fa-info-circle me-2"></i>System Information
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm">
+                            <tr>
+                                <td><strong>Application:</strong></td>
+                                <td>Secure Application v1.0.0</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Framework:</strong></td>
+                                <td>FastAPI</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Database:</strong></td>
+                                <td>SQLite</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Encryption:</strong></td>
+                                <td>AES-256</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Auth Method:</strong></td>
+                                <td>Secure Cookies</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h6 class="mb-0">
+                            <i class="fas fa-shield-alt me-2"></i>Security Features Active
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6 mb-2">
+                                <i class="fas fa-check text-success me-1"></i>
+                                <small>RBAC Enforcement</small>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <i class="fas fa-check text-success me-1"></i>
+                                <small>AES-256 Encryption</small>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <i class="fas fa-check text-success me-1"></i>
+                                <small>bcrypt Passwords</small>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <i class="fas fa-check text-success me-1"></i>
+                                <small>XSS Protection</small>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <i class="fas fa-check text-success me-1"></i>
+                                <small>Security Headers</small>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <i class="fas fa-check text-success me-1"></i>
+                                <small>Input Validation</small>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <i class="fas fa-check text-success me-1"></i>
+                                <small>Account Lockout</small>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <i class="fas fa-check text-success me-1"></i>
+                                <small>Audit Logging</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card mt-4">
+            <div class="card-header bg-warning text-dark">
+                <h6 class="mb-0">
+                    <i class="fas fa-bolt me-2"></i>Admin Quick Actions
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="/dashboard" class="btn btn-outline-primary">
+                        <i class="fas fa-tachometer-alt me-1"></i>User Dashboard
+                    </a>
+                    <a href="/security-info" class="btn btn-outline-info">
+                        <i class="fas fa-info-circle me-1"></i>Security Info
+                    </a>
+                    <a href="/health" class="btn btn-outline-success">
+                        <i class="fas fa-heartbeat me-1"></i>System Health
+                    </a>
+                    <button type="button" class="btn btn-outline-secondary" onclick="refreshUsers()">
+                        <i class="fas fa-sync me-1"></i>Refresh Users
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">
+                <i class="fas fa-user-shield me-2"></i>
+                Admin Panel - Restricted Access
+            </p>
+            <small class="text-muted">
+                Built with FastAPI, SQLite, and Bootstrap | Security Project Demo
+            </small>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Search functionality
+        const searchInput = document.getElementById('userSearch');
+        const userItems = document.querySelectorAll('.user-item');
+        
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            
+            userItems.forEach(item => {
+                const username = item.dataset.username;
+                const email = item.dataset.email;
+                const role = item.dataset.role;
+                
+                if (username.includes(searchTerm) || 
+                    email.includes(searchTerm) || 
+                    role.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        // Refresh users function
+        function refreshUsers() {
+            // Show loading indicator
+            const usersList = document.getElementById('usersList');
+            usersList.style.opacity = '0.5';
+            
+            // Simulate refresh (in real app, this would make an API call)
+            setTimeout(() => {
+                usersList.style.opacity = '1';
+                
+                // Show success message
+                const alert = document.createElement('div');
+                alert.className = 'alert alert-success alert-dismissible fade show position-fixed';
+                alert.style.cssText = 'top: 20px; right: 20px; z-index: 1050;';
+                alert.innerHTML = `
+                    <i class="fas fa-check-circle me-2"></i>User list refreshed
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                document.body.appendChild(alert);
+                
+                // Remove after 3 seconds
+                setTimeout(() => {
+                    if (alert.parentNode) {
+                        alert.remove();
+                    }
+                }, 3000);
+            }, 500);
+        }
+
+        // Confirm delete with enhanced modal
+        document.querySelectorAll('form[action*="delete-user"]').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                const username = this.querySelector('button').textContent.trim();
+                if (!confirm(`⚠️ WARNING: This will permanently delete user ${username} and all their data.\n\nThis action cannot be undone!\n\nAre you absolutely sure?`)) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // Auto-refresh every 30 seconds (optional)
+        let autoRefreshInterval;
+        
+        function startAutoRefresh() {
+            autoRefreshInterval = setInterval(() => {
+                // Update timestamps, check for new users, etc.
+                console.log('Auto-refreshing admin panel...');
+            }, 30000);
+        }
+        
+        function stopAutoRefresh() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+            }
+        }
+
+        // Start auto-refresh when page loads
+        startAutoRefresh();
+        
+        // Stop auto-refresh when page is hidden
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                stopAutoRefresh();
+            } else {
+                startAutoRefresh();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + K for search focus
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                searchInput.focus();
+            }
+            
+            // Escape to clear search
+            if (e.key === 'Escape' && document.activeElement === searchInput) {
+                searchInput.value = '';
+                searchInput.dispatchEvent(new Event('input'));
+            }
+        });
+
+        // Add tooltip for search shortcut
+        searchInput.title = 'Press Ctrl+K to focus, Escape to clear';
+    </script>
+</body>
+</html>
