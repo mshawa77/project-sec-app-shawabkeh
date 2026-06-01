@@ -1,0 +1,36 @@
+👑 Admin Account:
+👤 Username: admin
+📧 Email: admin@secureapp.com
+🔐 Role: admin
+🔑 Password: Admin123!@#
+📅 Created: 2026-05-02 16:30:09
+👤 Regular Users:
+User 1:
+👤 Username: mohammad
+📧 Email: shawabkehmohmmad8@gmail.com
+🔐 Role: user
+🔑 Password: Password123!
+📅 Created: 2026-05-02 16:42:36
+User 2:
+👤 Username: mohammed_shuwabkeh
+📧 Email: mohammed@secureapp.com
+🔐 Role: user
+🔑 Password: Mohammed123!
+📅 Created: 2026-05-02 16:47:04
+User 3:
+👤 Username: mohammadshawabekh
+📧 Email: mohammad@secureapp.com
+🔐 Role: user
+🔑 Password: Mohammad123!
+📅 Created: 2026-05-02 17:03:26
+User 4:
+👤 Username: ahmadsrahan
+📧 Email: ahmad@secureapp.com
+🔐 Role: user
+🔑 Password: Ahmad123!
+📅 Created: 2026-05-02 17:03:29
+📊 Summary:
+Total Users: 5 accounts
+Admin Accounts: 1
+User Accounts: 4
+All Ready: For login and demonstration
